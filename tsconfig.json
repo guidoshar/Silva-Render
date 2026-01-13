@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -21,8 +17,16 @@
       {
         "name": "next"
       }
-    ]
+    ],
+
+    /* 添加路径吧 */
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"]
+    }
+    /* 添加完毕 */
   },
+
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
@@ -31,7 +35,5 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
