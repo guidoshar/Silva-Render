@@ -24,6 +24,70 @@ export default function Page() {
     return () => window.removeEventListener("keydown", handleTab);
   }, []);
 
+  async function handleSpeak(text: string) {
+    try {
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      
+      // 检查响应状态
+      if (!res.ok) {
+        let errorMessage = `HTTP ${res.status}: ${res.statusText || "无法生成语音"}`;
+        try {
+          const errorData = await res.json();
+          if (errorData && errorData.error) {
+            errorMessage = errorData.error;
+          } else if (Object.keys(errorData).length > 0) {
+            errorMessage = JSON.stringify(errorData);
+          }
+        } catch {
+          // 如果不是 JSON，尝试读取文本
+          try {
+            const errorText = await res.text();
+            if (errorText) errorMessage = errorText;
+          } catch {
+            // 忽略
+          }
+        }
+        console.error("TTS API Error:", errorMessage);
+        alert(`TTS 错误: ${errorMessage}`);
+        return;
+      }
+      
+      // 检查 Content-Type 是否为音频格式
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.startsWith("audio/")) {
+        const errorText = await res.text();
+        console.error("TTS 返回了非音频格式:", errorText);
+        alert("TTS 返回了无效的音频格式");
+        return;
+      }
+      
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      
+      const audio = new Audio(url);
+      
+      // 添加错误处理
+      audio.onerror = (e) => {
+        console.error("音频播放错误:", e);
+        URL.revokeObjectURL(url); // 清理 URL
+        alert("音频播放失败，请检查音频格式是否被浏览器支持");
+      };
+      
+      // 播放完成后清理 URL
+      audio.onended = () => {
+        URL.revokeObjectURL(url);
+      };
+      
+      await audio.play();
+    } catch (err) {
+      console.error("TTS Error:", err);
+      alert(`TTS 错误: ${err instanceof Error ? err.message : "未知错误"}`);
+    }
+  }
   async function send() {
     if (!input.trim()) return;
 
@@ -86,7 +150,12 @@ export default function Page() {
         {messages.map((msg, idx) => (
           <div key={idx}>
             {/* 气泡 */}
-            <ChatBubble role={msg.role}>{msg.text}</ChatBubble>
+            <ChatBubble 
+            role={msg.role}
+            onSpeak={() => handleSpeak(msg.text)}
+            >
+              {msg.text}
+            </ChatBubble>
 
             {/* 富媒体 UI 渲染 */}
             {msg.ui?.map((block: any, i: number) => renderUIBlock(block, i))}

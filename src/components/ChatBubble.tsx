@@ -3,9 +3,11 @@
 export default function ChatBubble({
   role,
   children,
+  onSpeak, // 添加回调
 }: {
   role: "user" | "assistant";
   children: any;
+  onSpeak?: () => void; //可选，因为USER气泡不需要
 }) {
   const isUser = role === "user";
 
@@ -20,6 +22,7 @@ export default function ChatBubble({
     >
       <div
         style={{
+          position: "relative", // 为了后续可能添加的功能预留位置
           maxWidth: "72%",
           padding: "14px 18px",
 
@@ -61,7 +64,29 @@ export default function ChatBubble({
         }}
       >
         {children}
-      </div>
-    </div>
+
+        {/* Silva语音按钮 */}
+        {!isUser && onSpeak && (
+          <button
+            onClick={onSpeak}
+            style={{
+              position: "absolute",
+              bottom: -4,
+              right: -4,
+              border: "none",
+              background: "rgba(255,255,255,0.65)",
+              borderRadius: 12,
+              padding: "3px 6px",
+              fontSize: 12,
+              cursor: "pointer",
+              backdropFilter: "blur(6px)",
+            }}
+            title="让Silva读给你听"
+          >
+            🔊
+          </button>
+        )}
+      </div>    
+    </div>  
   );
 }
