@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         model: deployment,
         input: text,
-        voice: "alloy",
+        voice: "glimmer",
       }),
     });
 
