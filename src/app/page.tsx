@@ -4,6 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import ChatBubble from "@/components/ChatBubble";
 import { renderUIBlock } from "@/components/ui-render";
 import LoadingBar from "@/components/LoadingBar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMicrophone, faStop } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 export default function Page() {
   const [input, setInput] = useState("");
@@ -128,158 +131,126 @@ export default function Page() {
 
   return (
     <main
-    style={{
-      minHeight: "100vh",
-      padding: 24,
-      background: `
+      style={{
+        minHeight: "100vh",
+        padding: 40,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: `
         radial-gradient(circle at 20% 20%, rgba(46,107,78,0.08), transparent 40%),
         radial-gradient(circle at 80% 30%, rgba(46,107,78,0.06), transparent 50%),
         linear-gradient(180deg, #f4faf7, #eef5f1)
       `,
-    }}
-  >
-
-      {/* ===== Hero 区域 ===== */}
+      }}
+    >
+      {/* ===== 主卡片 ===== */}
       <div
         style={{
-          textAlign: "center",
-          marginBottom: 60,
-          paddingTop: 40, 
+          width: "100%",
+          maxWidth: 980,
+          padding: "120px 70px 60px",
+          borderRadius: 40,
+          background: "rgba(255,255,255,0.9)",
+          backdropFilter: "blur(30px)",
+          boxShadow:
+            "0 50px 120px rgba(0,0,0,0.08), 0 10px 30px rgba(0,0,0,0.06)",
+          position: "relative",
+          transition: "all 0.4s ease",
         }}
       >
-        <img
-          src="https://guidoshar.com/wp-content/uploads/2025/11/ChatGPT-Image-2025年10月9日-下午04_37_26.png"
-          alt="Guido Chat Logo"
+        {/* ===== 悬浮 Logo ===== */}
+        <div
           style={{
-            width: 120,
-            height: 120,
-            borderRadius: 24,
-            objectFit: "cover",
-            boxShadow: "0 12px 32px rgba(0,0,0,0.15)",
-            marginBottom: 20,
+            position: "absolute",
+            top: -60,
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "white",
+            padding: 12,
+            borderRadius: 28,
+            boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
           }}
-        />
+        >
+          <img
+            src="https://guidoshar.com/wp-content/uploads/2025/11/ChatGPT-Image-2025年10月9日-下午04_37_26.png"
+            alt="Guido Chat Logo"
+            style={{
+              width: 120,
+              height: 120,
+              borderRadius: 20,
+              objectFit: "cover",
+            }}
+          />
+        </div>
 
-      <h1
-        style={{
-          fontSize: 42,
-          fontWeight: 700,
-          marginBottom: 20,
-          color: "#le3f30",
-          letterSpacing: 1,
-        }}
-      >
-        Guido Chat
-      </h1>
+        {/* ===== 标题区 ===== */}
+        <div style={{ textAlign: "center", marginBottom: 60 }}>
+          <h1
+            style={{
+              fontSize: 40,
+              fontWeight: 700,
+              marginBottom: 12,
+              color: "#1f3f30",
+              letterSpacing: 1,
+            }}
+          >
+            Guido Chat
+          </h1>
 
-      <p
-        style={{
-          fontSize: 16,
-          opacity: 0.7,
-          marginTop: 12,
-        }}
-      >
-        我的第一个富媒体项目，希望顺利，祝福我吧！
-      </p>
-      </div>
+          <p
+            style={{
+              fontSize: 15,
+              opacity: 0.65,
+            }}
+          >
+            我的第一个富媒体项目，希望顺利。祝福我吧。
+          </p>
+        </div>
 
-      <div
-        style={{
-          maxWidth: 1600,
-          margin: "0 auto",
-          padding: 24,
-          borderRadius: 24,
-          background: "rgba(255,255,255,0.6)",
-          backdropFilter: "blur(18px)",
-          boxShadow: "0 6px 24px rgba(0,0,0,0.08)",
-        }}
-      >
+        {/* ===== 空状态 ===== */}
+        {messages.length === 0 && (
+          <div
+            style={{
+              textAlign: "center",
+              padding: "60px 20px",
+              opacity: 0.55,
+              marginBottom: 40,
+            }}
+          >
+            <div style={{ fontSize: 18, marginBottom: 12 }}>
+              今天有什么想聊聊的吗？
+            </div>
+            <div style={{ fontSize: 14 }}>Silva 在这听你说。</div>
+          </div>
+        )}
+
+        {/* ===== 聊天区 ===== */}
         {messages.map((msg, idx) => (
           <div key={idx}>
-            <ChatBubble
-              role={msg.role}
-              onSpeak={() => handleSpeak(msg.text)}
-            >
+            <ChatBubble role={msg.role} onSpeak={() => handleSpeak(msg.text)}>
               {msg.text}
             </ChatBubble>
-
-            {msg.ui?.map((block: any, i: number) =>
-              renderUIBlock(block, i)
-            )}
+            {msg.ui?.map((block: any, i: number) => renderUIBlock(block, i))}
           </div>
         ))}
 
         {loading && (
-          <ChatBubble role="assistant">
-            小夏等我一下，我正在想…
-          </ChatBubble>
+          <ChatBubble role="assistant">小夏等我一下，我正在想…</ChatBubble>
         )}
 
-        <div style={{ marginTop: 20 }}>
+        {/* ===== 输入区 ===== */}
+        <div style={{ marginTop: 30 }}>
           {loading ? (
             <LoadingBar />
-          ) : asrMode ? (
-            // ===== ASR 凹面输入 Bar =====
+          ) : (
             <div
-              onClick={() => {
-                recording ? stopRecording() : startRecording();
-              }}
               style={{
-                cursor: "pointer",
-                padding: 16,
-                borderRadius: 18,
-                background: "rgba(255,255,255,0.7)",
-                border: "1px solid rgba(46,107,78,0.25)",
-                boxShadow:
-                  "inset 6px 6px 12px rgba(0,0,0,0.08), inset -6px -6px 12px rgba(255,255,255,0.9)",
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 16,
+                gap: 14,
+                alignItems: "stretch",
               }}
             >
-              <div>
-                <div
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                    color: "#244f38",
-                  }}
-                >
-                  {recording
-                    ? "🎙️ 正在录音，点击结束"
-                    : "🎙️ 点击开始语音输入"}
-                </div>
-                <div
-                  style={{
-                    fontSize: 12,
-                    opacity: 0.7,
-                    marginTop: 4,
-                  }}
-                >
-                  {asrHint || "说完自动上传"}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  width: 46,
-                  height: 46,
-                  borderRadius: 14,
-                  display: "grid",
-                  placeItems: "center",
-                  fontSize: 18,
-                  background: recording
-                    ? "rgba(255,70,70,0.15)"
-                    : "rgba(46,107,78,0.12)",
-                }}
-              >
-                {recording ? "■" : "●"}
-              </div>
-            </div>
-          ) : (
-            // ===== 普通输入 =====
-            <div style={{ display: "flex", gap: 12 }}>
               <textarea
                 ref={inputRef}
                 value={input}
@@ -294,68 +265,83 @@ export default function Page() {
                 placeholder="对我说点什么吧，小夏"
                 style={{
                   flexGrow: 1,
-                  padding: 12,
-                  borderRadius: 12,
-                  border: "1px solid #c4d9cf",
-                  background: "rgba(255,255,255,0.8)",
+                  padding: 18,
+                  borderRadius: 20,
+                  border: "1px solid rgba(0,0,0,0.05)",
+                  background: "rgba(255,255,255,0.95)",
                   resize: "none",
-                  fontSize: 15,
+                  fontSize: 16,
+                  boxShadow: "inset 3px 3px 8px rgba(0,0,0,0.05)",
                 }}
               />
 
+              {/* 🎙 语音按钮 */}
               <button
                 onClick={() => {
-                  setAsrMode(true);
-                  setAsrHint("");
+                  recording ? stopRecording() : startRecording();
                 }}
                 style={{
-                  padding: "0 12px",
-                  borderRadius: 12,
-                  border: "1px solid rgba(0,0,0,0.08)",
-                  background: "rgba(255,255,255,0.7)",
+                  width: 58,
+                  height: 58,
+                  borderRadius: "50%",
+                  border: "none",
                   cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 18,
+                  background: recording
+                    ? "linear-gradient(135deg,#ff4b4b,#e60023)"
+                    : "rgba(46,107,78,0.12)",
+                  color: recording ? "white" : "#2e6b4e",
+                  boxShadow: recording
+                    ? "0 10px 25px rgba(172, 47, 47, 0.3)"
+                    : "0 6px 18px rgba(46,107,78,0.15)",
+                  transition: "all 0.2s ease",
                 }}
               >
-                🎙️
+                <FontAwesomeIcon icon={recording ? faStop : faMicrophone} />
               </button>
 
               <button
                 onClick={send}
                 style={{
-                  padding: "0 16px",
-                  borderRadius: 12,
-                  background: "#2e6b4e",
-                  color: "white",
+                  width: 58,
+                  height: 58,
+                  borderRadius: "50%",
                   border: "none",
                   cursor: "pointer",
-                  fontSize: 15,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 18,
+                  background: "linear-gradient(135deg,#2e6b4e,#3f8a66)",
+                  color: "white",
+                  boxShadow: "0 14px 30px rgba(46,107,78,0.28)",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 20px 40px rgba(46,107,78,0.35)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 14px 30px rgba(46,107,78,0.28)";
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = "translateY(1px)";
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
                 }}
               >
-                发送
+                <FontAwesomeIcon icon={faPaperPlane} />
               </button>
             </div>
           )}
         </div>
-
-        {asrMode && !loading && (
-          <div style={{ marginTop: 12, textAlign: "right" }}>
-            <button
-              onClick={() => {
-                setAsrMode(false);
-                setRecording(false);
-              }}
-              style={{
-                fontSize: 12,
-                opacity: 0.6,
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              退出语音输入
-            </button>
-          </div>
-        )}
       </div>
     </main>
   );
