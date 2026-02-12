@@ -138,9 +138,7 @@ export default function Page() {
         alignItems: "center",
         justifyContent: "center",
         background: `
-        radial-gradient(circle at 20% 20%, rgba(46,107,78,0.08), transparent 40%),
-        radial-gradient(circle at 80% 30%, rgba(46,107,78,0.06), transparent 50%),
-        linear-gradient(180deg, #f4faf7, #eef5f1)
+        url("/silva.png")
       `,
       }}
     >
@@ -315,7 +313,7 @@ export default function Page() {
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: 18,
-                  background: "linear-gradient(135deg,#2e6b4e,#3f8a66)",
+                  background: "linear-gradient(135deg,#2f6f52,#3c8764)",
                   color: "white",
                   boxShadow: "0 14px 30px rgba(46,107,78,0.28)",
                   transition: "all 0.2s ease",
