@@ -4,6 +4,7 @@
 
 Silva-Render 让你的 AI 应用能够直接渲染结构化的富媒体内容（UI Blocks），  
 从纯文本对话提升到图文混排、信息块、列表、卡片、未来甚至图表、图片、音频、可视化组件。
+<img width="1781" height="898" alt="guidoshar_silva_render" src="https://github.com/user-attachments/assets/05c4d381-ffaa-4d89-a4ba-55bd011016e7" />
 
 它是构建 **AI-Native UI** 的基础设施。
 
