@@ -128,27 +128,64 @@ export default function Page() {
 
   return (
     <main
-      style={{
-        minHeight: "100vh",
-        padding: 24,
-        background:
-          "linear-gradient(180deg, #e8f4ec, #edf7f3, #f4faf7)",
-      }}
-    >
+    style={{
+      minHeight: "100vh",
+      padding: 24,
+      background: `
+        radial-gradient(circle at 20% 20%, rgba(46,107,78,0.08), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(46,107,78,0.06), transparent 50%),
+        linear-gradient(180deg, #f4faf7, #eef5f1)
+      `,
+    }}
+  >
+
+      {/* ===== Hero 区域 ===== */}
+      <div
+        style={{
+          textAlign: "center",
+          marginBottom: 60,
+          paddingTop: 40, 
+        }}
+      >
+        <img
+          src="https://guidoshar.com/wp-content/uploads/2025/11/ChatGPT-Image-2025年10月9日-下午04_37_26.png"
+          alt="Guido Chat Logo"
+          style={{
+            width: 120,
+            height: 120,
+            borderRadius: 24,
+            objectFit: "cover",
+            boxShadow: "0 12px 32px rgba(0,0,0,0.15)",
+            marginBottom: 20,
+          }}
+        />
+
       <h1
         style={{
-          fontSize: 32,
+          fontSize: 42,
           fontWeight: 700,
           marginBottom: 20,
-          color: "#244f38",
+          color: "#le3f30",
+          letterSpacing: 1,
         }}
       >
         Guido Chat
       </h1>
 
+      <p
+        style={{
+          fontSize: 16,
+          opacity: 0.7,
+          marginTop: 12,
+        }}
+      >
+        我的第一个富媒体项目，希望顺利，祝福我吧！
+      </p>
+      </div>
+
       <div
         style={{
-          maxWidth: 800,
+          maxWidth: 1600,
           margin: "0 auto",
           padding: 24,
           borderRadius: 24,
