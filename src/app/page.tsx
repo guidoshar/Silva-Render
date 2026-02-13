@@ -137,9 +137,11 @@ export default function Page() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: `
-        url("/silva.png")
-      `,
+        
+        backgroundImage: 'url("/silva2.png")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {/* ===== 主卡片 ===== */}
@@ -164,26 +166,36 @@ export default function Page() {
             top: -60,
             left: "50%",
             transform: "translateX(-50%)",
-            background: "white",
             padding: 12,
             borderRadius: 28,
-            boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
+            // boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
           }}
         >
           <img
-            src="https://guidoshar.com/wp-content/uploads/2025/11/ChatGPT-Image-2025年10月9日-下午04_37_26.png"
-            alt="Guido Chat Logo"
+            src="/silva_logo.png"
+            alt="Silva Render Logo"
             style={{
-              width: 120,
-              height: 120,
-              borderRadius: 20,
-              objectFit: "cover",
+              maxWidth: 340,
+              height: "auto",  // 保持纵横比
+              display: "block",
+              filter: "drop-shadow(0 12px 30px rgba(0,0,0,0.35))",
+              transition: "all 0.4s ease",
+              marginTop:30,
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) =>{
+              e.currentTarget.style.transform = "scale(1.08) translateY(-4px)";
+              e.currentTarget.style.filter = "drop-shadow(0 18px 40px rgba(0,0,0,0.45))";
+            }}
+            onMouseLeave={(e) =>{
+              e.currentTarget.style.transform = "scale(1) translateY(0)";
+              e.currentTarget.style.filter = "drop-shadow(0 12px 30px rgba(0,0,0,0.35))";
             }}
           />
         </div>
 
         {/* ===== 标题区 ===== */}
-        <div style={{ textAlign: "center", marginBottom: 60 }}>
+        {/* <div style={{ textAlign: "center", marginBottom: 60 }}>
           <h1
             style={{
               fontSize: 40,
@@ -193,7 +205,7 @@ export default function Page() {
               letterSpacing: 1,
             }}
           >
-            Guido Chat
+            Silva Chat
           </h1>
 
           <p
@@ -204,7 +216,7 @@ export default function Page() {
           >
             我的第一个富媒体项目，希望顺利。祝福我吧。
           </p>
-        </div>
+        </div> */}
 
         {/* ===== 空状态 ===== */}
         {messages.length === 0 && (
@@ -265,8 +277,10 @@ export default function Page() {
                   flexGrow: 1,
                   padding: 18,
                   borderRadius: 20,
-                  border: "1px solid rgba(0,0,0,0.05)",
-                  background: "rgba(255,255,255,0.95)",
+                  background: "rgba(255,255,255,0.12)",
+                  backdropFilter: "blur(25px)",
+                  WebkitBackdropFilter: "blur(25px)",
+                  border: "1px solid rgba(255,255,255,0.3)",
                   resize: "none",
                   fontSize: 16,
                   boxShadow: "inset 3px 3px 8px rgba(0,0,0,0.05)",
